@@ -7,13 +7,13 @@ package revel
 import (
 	"fmt"
 	"io"
-	"net"
+//	"net"
 	"net/http"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
-
+	"github.com/tabalt/gracehttp"
 	"golang.org/x/net/websocket"
 )
 
@@ -161,11 +161,15 @@ func Run(port int) {
 		ERROR.Fatalln("Failed to listen:",
 			Server.ListenAndServeTLS(HTTPSslCert, HTTPSslKey))
 	} else {
+		//support grace restart
+		ERROR.Fatalln("Failed to serve:", gracehttp.ListenAndServe(Server.Addr , http.HandlerFunc(handle)))
+		/*
 		listener, err := net.Listen(network, Server.Addr)
 		if err != nil {
 			ERROR.Fatalln("Failed to listen:", err)
 		}
 		ERROR.Fatalln("Failed to serve:", Server.Serve(listener))
+        */
 	}
 }
 
